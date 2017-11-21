@@ -5,6 +5,16 @@
     <title>Um gráfico de barras feitos de divs</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <script src="https://d3js.org/d3.v4.min.js"></script>
+    <style>
+    .grad1 {
+        height: 200px;
+        background: red; /* For browsers that do not support gradients */
+        background: -webkit-linear-gradient(left, orange , yellow, green, cyan, blue, violet); /* For Safari 5.1 to 6.0 */
+        background: -o-linear-gradient(right, orange, yellow, green, cyan, blue, violet); /* For Opera 11.1 to 12.0 */
+        background: -moz-linear-gradient(right, orange, yellow, green, cyan, blue, violet); /* For Firefox 3.6 to 15 */
+        background: linear-gradient(to right, orange , yellow, green, cyan, blue, violet); /* Standard syntax (must be last) */
+    }
+    </style>
   </head>
 
   <body>
@@ -22,7 +32,7 @@
         </p>
       </div>
       <div>
-        <h1 id="mensagemdodia">
+        <h1 class="grad1" id="mensagemdodia">
           Carregando mensagem motivacional...
         </h1>
       </div>
