@@ -111,12 +111,16 @@
           function mouseNoCirculo(d){
             d3.selectAll("text")
               .style("font-weight", p => p.UORG_LOTACAO === d.UORG_LOTACAO ? "bold" : "normal");
+            d3.selectAll("circle")
+                .style("fill", p => p.UORG_LOTACAO === d.UORG_LOTACAO ? "green" : "steelblue");
           }
 
           deptos.on("mouseout", mouseSaiuCirculo);
           function mouseSaiuCirculo(d){
             d3.selectAll("text")
               .style("font-weight", "normal");
+              d3.selectAll("circle")
+                .style("fill", "steelblue");
           }
 
 
@@ -141,7 +145,7 @@
                             .range([ 2, 25 ])
             d3.selectAll("g.depto")
               .select("circle")
-              //.transition().duration(700) // descomente aqui para testar
+              .transition().duration(700) // descomente aqui para testar
               .attr("r", d => radiusScale(d[dimensao]))
           }
         }

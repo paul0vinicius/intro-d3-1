@@ -43,7 +43,7 @@
 
     <style>
       .mychart rect {
-        fill: #5A0B4D;
+        /*fill: #5A0B4D;*/
       }
 
       .mychart text {
@@ -117,6 +117,10 @@
                     .domain([0, d3.max(dados, d => d[dimensaoSelecionada])])
                     .rangeRound([0, larguraMaxBarras]);
 
+          var escalaCor = d3.scaleQuantize()
+            .domain([0, d3.max(dados, d => d[dimensaoSelecionada])])
+            .range(colorbrewer.Reds[5])
+
           /*
            * Desenho inicial
            */
@@ -129,6 +133,7 @@
               .attr("y", d => y(d.nome_curto))
               .attr("height", y.bandwidth())
               .attr("class", "depto")
+              .attr("fill", d => escalaCor(d[dimensaoSelecionada]))
 
           grafico.selectAll("text")
             .data(dados)
@@ -146,6 +151,9 @@
             d3.selectAll("text")
               .style("font-weight",
                       p => p.nome_curto === d.nome_curto ? "bold" : "normal");
+            d3.selectAll("rect")
+              .style("fill",
+                      p => p.nome_curto === d.nome_curto ? "indigo" : d => escalaCor(d[dimensaoSelecionada]));
 
             d3.select("#tooltip") // reparou que tem uma div escondida no html?
   						.style("left", (d3.event.pageX - 50) + "px")
@@ -162,6 +170,8 @@
           function mouseSaiu(d){
             d3.selectAll("text")
               .style("font-weight", "normal");
+            d3.selectAll("rect")
+              .style("fill", d => escalaCor(d[dimensaoSelecionada]));
 
             // não precisamos mais de tooltip
             d3.select("#tooltip").classed("hidden", true);
@@ -181,17 +191,23 @@
 
           function mudaDimensaoEReordena(dimensao) {
             dimensaoSelecionada = dimensao
-            // necessario para reordenar as barras/nomes
-            // var nomesOrdenados = dados.map(d => d.nome_curto)
-            //                           .sort((a, b) => d3.ascending(a[dimensao], b[dimensao]))
-            // y.domain(nomesOrdenados)
+            //necessario para reordenar as barras/nomes
+            var nomesOrdenados = dados.sort((a, b) => d3.ascending(a[dimensao], b[dimensao]))
+              .map(d => d.nome_curto)
+
+            console.log(nomesOrdenados);
+
+            // Encontrar forma de mapear listas ao inves de objetos.
+            y.domain(nomesOrdenados[0], nomesOrdenados[25])
 
             var maxValue = d3.max(dados, d => parseFloat(d[dimensao]))
 
             escalaLargura = escalaLargura.domain([0, maxValue])
 
+            escalaCor = escalaCor.domain([0, maxValue])
+
             grafico.selectAll("rect")
-              //.sort((a, b) => b[dimensao] - a[dimensao]) // necessario na hora de reordenar os retângulos
+              .sort((a, b) => b[dimensao] - a[dimensao]) // necessario na hora de reordenar os retângulos
               .transition().duration(300).delay((d,i) => i * 20)
               .attr("width", d => escalaLargura(d[dimensao]))
 
