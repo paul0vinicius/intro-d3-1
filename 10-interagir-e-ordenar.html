@@ -198,7 +198,7 @@
             console.log(nomesOrdenados);
 
             // Encontrar forma de mapear listas ao inves de objetos.
-            y.domain(nomesOrdenados[0], nomesOrdenados[25])
+            y.domain(nomesOrdenados)
 
             var maxValue = d3.max(dados, d => parseFloat(d[dimensao]))
 
@@ -208,9 +208,16 @@
 
             grafico.selectAll("rect")
               .sort((a, b) => b[dimensao] - a[dimensao]) // necessario na hora de reordenar os retângulos
-              .transition().duration(300).delay((d,i) => i * 20)
+              .transition().duration(300).delay((d,i) => i * 0)
               .attr("width", d => escalaLargura(d[dimensao]))
+              .attr("fill", d => escalaCor(d[dimensao]))
+              .attr("y", d => y(d.nome_curto))
 
+            grafico.selectAll("text")
+              .transition().duration(300).delay((d,i) => i * 0)
+              .attr("y", d => y(d.nome_curto) + y.bandwidth()/2 + 2)
+              .attr("x", larguraTexto - 10)
+              .text(d => d.nome_curto)
           }
         }
       }
